@@ -288,6 +288,13 @@ class NetworkAdapter(object):
             new_value = self._ifAttributes['bridge-opts'][key] + value
         self.replaceBropt(key, new_value)
 
+    def addMasterAdapter(self, master_adapter):
+        # Check if self is not master
+        # Check if master is adapter
+        # Check if master is not slave
+        # Add to master as slave
+        pass
+
     def setUp(self, up):
         """Set and add to the up commands for an interface.
 
@@ -401,6 +408,24 @@ class NetworkAdapter(object):
                 cmd (str): a shell command
         """
         self._ensure_list(self._ifAttributes, "post-down", cmd)
+
+    def setBondMaster(self, master):
+        pass
+
+    def setBondMiimon(self, master):
+        pass
+
+    def setBondUpDelay(self, master):
+        pass
+
+    def setBondDownDelay(self, master):
+        pass
+
+    def setBondPrimary(self, master):
+        pass
+
+    def setBondSlaves(self, master):
+        pass
 
     def setUnknown(self, key, val):
         """Stores uncommon options as there are with no special handling

@@ -98,6 +98,34 @@ class InterfacesReader(object):
                 self._adapters[self._context].setHostapd(sline[1])
             elif sline[0] == 'wpa-conf':
                 self._adapters[self._context].setWpaConf(sline[1])
+            elif sline[0] == 'bond-mode':
+                # Check mode here
+                pass
+            elif sline[0] == 'bond-miimon':
+                pass
+            elif sline[0] == 'bond-updelay':
+                pass
+            elif sline[0] == 'bond-downdelay':
+                pass
+            elif sline[0] == 'bond-primary':
+                pass
+            elif sline[0] == 'bond-master':
+                # Find master adapter.
+
+                # If found
+                #     Check if master has bond-slaves and this adapter as it
+                #     addMaster to this adapter
+                #
+                # Add master
+                pass
+            elif sline[0] == 'bond-slaves':
+                # find slaves adapters
+
+                # for found ones
+                #     Check if slave has it as master
+                #
+                # Add slaves
+                pass
             elif sline[0] == 'dns-nameservers':
                 nameservers = sline
                 del nameservers[0]
