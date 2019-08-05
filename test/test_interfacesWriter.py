@@ -179,6 +179,28 @@ class TestInterfacesWriter(unittest.TestCase):
             for line_written, line_expected in zip(content, expected):
                 self.assertEqual(line_written.strip(), line_expected)
 
+    def test_bond_write(self):
+        options = {
+            'addrFam': 'inet',
+            'source': 'static',
+            'name': 'eth0',
+            'auto': True,
+            'address': '0.0.0.0',
+        }
+        expected = [
+            "auto eth0",
+            "iface eth0 inet static",
+            "address 0.0.0.0",
+        ]
+        adapter = NetworkAdapter(options)
+        with tempfile.NamedTemporaryFile() as tempf:
+            writer = InterfacesWriter([adapter], tempf.name)
+            writer.write_interfaces()
+
+            content = open(tempf.name).read().split("\n")
+            for line_written, line_expected in zip(content, expected):
+                self.assertEqual(line_written.strip(), line_expected)
+
     def test_header_comment_no_symbol_write(self):
         """Write without symbol should work"""
 

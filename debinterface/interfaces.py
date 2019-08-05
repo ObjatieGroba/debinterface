@@ -166,3 +166,32 @@ class Interfaces(object):
         else:
             # self._interfaces_path is never None
             self._backup_path = self._interfaces_path + ".bak"
+
+    def validateBond(self):
+        for adapter in self._adapters:
+            attrs = adapter.attributes
+
+            if 'bond-mode' in attrs:
+                mode = attrs['bond-mode']
+
+                if mode == 0 or mode == 'balance-rr' or \
+                   mode == 3 or mode == 'broadcast':
+                    if not 'bond-slaves' in attrs:
+                        raise ValueError("Interface {} have no slaves".format(attrs['name']))
+
+                elif mode == 1 or mode == 'active-backup':
+                    if not 'bond-primary' in attrs:
+                        raise ValueError("Interface {} have no primary".format(attrs['name']))
+                    primary = self.getAdapter(attrs['bond-primary'])
+                    if not primary:
+                        raise ValueError("Interface {0} have {1} as primary, but {1} was not found".format(attrs['name'], attrs['bond-primary']))
+
+            if 'bond-slaves' in attrs:
+                slaves = attrs['bond-slaves']
+                if slaves != ['none']:
+                    for slave in slaves:
+                        slave_adapter = self.getAdapter(slave)
+                        if not slave_adapter or slave_adapter.get_attr('bond-master') != attrs['name']:
+                            raise ValueError("Interface {} have no {} as master".format(slave, attrs['name']))
+
+

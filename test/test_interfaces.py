@@ -6,6 +6,7 @@ from ..debinterface import Interfaces
 
 INF_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "interfaces.txt")
 INF2_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "interfaces2.txt")
+INF5_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "interfaces5.txt")
 
 class TestInterfaces(unittest.TestCase):
     def test_interfaces_paths(self):
@@ -78,3 +79,7 @@ class TestInterfaces(unittest.TestCase):
         self.assertEqual(len(itfs.adapters), nb_adapters - 1)
         for adapter in itfs.adapters:
             self.assertNotEqual("eth0", adapter.attributes["name"])
+
+    def test_bond(self):
+        itfs = Interfaces(interfaces_path=INF5_PATH)
+        itfs.validateBond()

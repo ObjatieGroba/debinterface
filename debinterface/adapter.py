@@ -288,13 +288,6 @@ class NetworkAdapter(object):
             new_value = self._ifAttributes['bridge-opts'][key] + value
         self.replaceBropt(key, new_value)
 
-    def addMasterAdapter(self, master_adapter):
-        # Check if self is not master
-        # Check if master is adapter
-        # Check if master is not slave
-        # Add to master as slave
-        pass
-
     def setUp(self, up):
         """Set and add to the up commands for an interface.
 
@@ -409,23 +402,28 @@ class NetworkAdapter(object):
         """
         self._ensure_list(self._ifAttributes, "post-down", cmd)
 
-    def setBondMaster(self, master):
-        pass
+    def setBondMaster(self, master_adapter_name):
+        self._ifAttributes['bond-master'] = master_adapter_name
 
-    def setBondMiimon(self, master):
-        pass
+    def setBondMode(self, mode):
+        self._ifAttributes['bond-mode'] = mode
 
-    def setBondUpDelay(self, master):
-        pass
+    def setBondMiimon(self, miimon):
+        self._ifAttributes['bond-miimon'] = miimon
 
-    def setBondDownDelay(self, master):
-        pass
+    def setBondUpDelay(self, delay):
+        self._ifAttributes['bond-updelay'] = delay
 
-    def setBondPrimary(self, master):
-        pass
+    def setBondDownDelay(self, delay):
+        self._ifAttributes['bond-donwdelay'] = delay
 
-    def setBondSlaves(self, master):
-        pass
+    def setBondPrimary(self, primary_name):
+        self._ifAttributes['bond-primary'] = primary_name
+
+    def setBondSlaves(self, slaves):
+        if not isinstance(slaves, list):
+            slaves = [slaves]
+        self._ifAttributes['bond-slaves'] = slaves
 
     def setUnknown(self, key, val):
         """Stores uncommon options as there are with no special handling

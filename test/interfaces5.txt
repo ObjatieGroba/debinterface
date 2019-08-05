@@ -1,0 +1,29 @@
+# Example of bond interfaces
+
+auto bond0
+iface bond0 inet static
+    address 0.0.0.0
+    netmask 0.0.0.0
+    bond-slaves enp1s0 enp2s0
+    up /sbin/ifenslave bond0 enp1s0 enp2s0
+    down /sbin/ifenslave -d bond0 enp1s0 enp2s0
+
+auto enp1s0
+iface enp1s0 inet manual
+    bond-master bond0
+
+auto enp2s0
+iface enp2s0 inet manual
+    bond-master bond0
+
+auto bond0.10
+iface bond0.10 inet static
+    address 192.168.10.1
+    netmask 255.255.255.0
+    vlan_raw_device bond0
+
+auto bond0.20
+iface bond0.20 inet static
+    address 192.168.20.1
+    netmask 255.255.255.0
+    vlan_raw_device bond0

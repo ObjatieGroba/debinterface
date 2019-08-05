@@ -8,6 +8,7 @@ INF_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "interfaces.
 INF2_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "interfaces2.txt")
 INF3_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "interfaces3.txt")
 INF4_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "interfaces4.txt")
+INF5_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "interfaces5.txt")
 
 class TestInterfacesReader(unittest.TestCase):
     def test_parse_interfaces_count(self):
@@ -141,6 +142,48 @@ class TestInterfacesReader(unittest.TestCase):
                                                   'pre-down': [],
                                                   'pre-up': [],
                                                   'source': 'loopback',
+                                                  'up': []})
+
+    def test_read_bond_interfaces(self):
+        reader = InterfacesReader(INF5_PATH)
+        adapters = reader.parse_interfaces(read_comments=True)
+        self.assertEqual(adapters[0].attributes, {'addrFam': 'inet',
+                                                  'address': '0.0.0.0',
+                                                  'auto': True,
+                                                  'bond-slaves': ['enp1s0', 'enp2s0'],
+                                                  'bridge-opts': {},
+                                                  'down': ['/sbin/ifenslave -d bond0 enp1s0 enp2s0'],
+                                                  'name': 'bond0',
+                                                  'netmask': '0.0.0.0',
+                                                  'post-down': [],
+                                                  'post-up': [],
+                                                  'pre-down': [],
+                                                  'pre-up': [],
+                                                  'source': 'static',
+                                                  'up': ['/sbin/ifenslave bond0 enp1s0 enp2s0']})
+        self.assertEqual(adapters[1].attributes, {'addrFam': 'inet',
+                                                  'auto': True,
+                                                  'bond-master': 'bond0',
+                                                  'bridge-opts': {},
+                                                  'down': [],
+                                                  'name': 'enp1s0',
+                                                  'post-down': [],
+                                                  'post-up': [],
+                                                  'pre-down': [],
+                                                  'pre-up': [],
+                                                  'source': 'manual',
+                                                  'up': []})
+        self.assertEqual(adapters[2].attributes, {'addrFam': 'inet',
+                                                  'auto': True,
+                                                  'bond-master': 'bond0',
+                                                  'bridge-opts': {},
+                                                  'down': [],
+                                                  'name': 'enp2s0',
+                                                  'post-down': [],
+                                                  'post-up': [],
+                                                  'pre-down': [],
+                                                  'pre-up': [],
+                                                  'source': 'manual',
                                                   'up': []})
 
     def test_read_comments_space(self):

@@ -50,7 +50,11 @@ VALID_OPTS = {
     'post-up': {'type': list},
     'down': {'type': list},
     'pre-down': {'type': list},
-    'post-down': {'type': list}
+    'post-down': {'type': list},
+    'bond-mode': {'in': ['balance-rr', 'active-backup', 'balance-xor', 'broadcast', '802.3ad', 'balance-tlb', 'balance-alb', 0, 1, 2, 3, 4, 5, 6]},
+    'bond-miimon': {'type': int},
+    'bond-updelay': {'type': int},
+    'bond-downdelay': {'type': int}
 }
 REQUIRED_FAMILY_OPTS = {
     "inet": {
