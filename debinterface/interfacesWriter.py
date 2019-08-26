@@ -24,6 +24,8 @@ class InterfacesWriter(object):
     ]
     _prepFields = ['pre-up', 'pre-down', 'up', 'down', 'post-up', 'post-down']
     _bridgeFields = ['ports', 'fd', 'hello', 'maxage', 'stp', 'maxwait']
+    _bondFields = ['bond-master', 'bond-slaves', 'bond-miimon', 'bond-updelay', 'bond-downdelay',
+                   'bond-primary', 'bond-mode']
     _plugins = ['hostapd', 'wpa-conf']
 
     def __init__(self, adapters, interfaces_path, backup_path=None,
@@ -140,6 +142,7 @@ class InterfacesWriter(object):
         self._write_bridge(interfaces, adapter, ifAttributes)
         self._write_plugins(interfaces, adapter, ifAttributes)
         self._write_callbacks(interfaces, adapter, ifAttributes)
+        self._write_bond(interfaces, adapter, ifAttributes)
         self._write_unknown(interfaces, adapter, ifAttributes)
         interfaces.write("\n")
 
@@ -151,6 +154,21 @@ class InterfacesWriter(object):
                 interfaces.write(self._auto.substitute(d))
         except KeyError:
             pass
+
+    def _write_bond(self, interfaces, adapter, ifAttributes):
+        for field in self._bondFields:
+            try:
+                value = ifAttributes[field]
+                if value is not None:
+                    if isinstance(value, list):
+                        d = dict(varient=field,
+                                 value=" ".join(ifAttributes[field]))
+                    else:
+                        d = dict(varient=field, value=ifAttributes[field])
+                    interfaces.write(self._cmd.substitute(d))
+            # Keep going if a field isn't provided.
+            except KeyError:
+                pass
 
     def _write_hotplug(self, interfaces, adapter, ifAttributes):
         """ Write if applicable """

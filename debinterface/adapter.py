@@ -538,7 +538,14 @@ class NetworkAdapter(object):
                     'hostapd': self.setHostapd,
                     'dns-nameservers': self.setDnsNameservers,
                     'dns-search': self.setDnsSearch,
-                    'wpa-conf': self.setWpaConf
+                    'wpa-conf': self.setWpaConf,
+                    'bond-master': self.setBondMaster,
+                    'bond-slaves': self.setBondSlaves,
+                    'bond-miimon': self.setBondMiimon,
+                    'bond-mode': self.setBondMode,
+                    'bond-updelay': self.setBondUpDelay,
+                    'bond-downdelay': self.setBondDownDelay,
+                    'bond-primary': self.setBondPrimary
                 }
                 for key, value in options.items():
                     if key in roseta:

@@ -191,7 +191,7 @@ class Interfaces(object):
                 if slaves != ['none']:
                     for slave in slaves:
                         slave_adapter = self.getAdapter(slave)
-                        if not slave_adapter or slave_adapter.get_attr('bond-master') != attrs['name']:
+                        if not slave_adapter or slave_adapter.attributes.get('bond-master', None) != attrs['name']:
                             raise ValueError("Interface {} have no {} as master".format(slave, attrs['name']))
 
 
