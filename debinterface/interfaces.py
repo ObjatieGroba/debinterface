@@ -183,7 +183,7 @@ class Interfaces(object):
                     primary = self.getAdapter(attrs['bond-primary'])
                     if not primary:
                         raise ValueError("Interface {0} have {1} as primary, but {1} was not found".format(attrs['name'], attrs['bond-primary']))
-                    if primary not in attrs['bond-slaves']:
+                    if primary.attributes['name'] not in attrs['bond-slaves']:
                         raise ValueError("Primary interface {} is not bond slave of {}".format(attrs['bond-primary'], attrs['name']))
 
             if 'bond-slaves' in attrs:
