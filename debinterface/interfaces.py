@@ -174,17 +174,17 @@ class Interfaces(object):
             if 'bond-mode' in attrs:
                 mode = attrs['bond-mode']
 
-                if mode == 0 or mode == 'balance-rr' or \
-                   mode == 3 or mode == 'broadcast':
-                    if not 'bond-slaves' in attrs:
-                        raise ValueError("Interface {} have no slaves".format(attrs['name']))
+                if not 'bond-slaves' in attrs:
+                    raise ValueError("Interface {} have no slaves".format(attrs['name']))
 
-                elif mode == 1 or mode == 'active-backup':
+                if mode == 1 or mode == 'active-backup':
                     if not 'bond-primary' in attrs:
                         raise ValueError("Interface {} have no primary".format(attrs['name']))
                     primary = self.getAdapter(attrs['bond-primary'])
                     if not primary:
                         raise ValueError("Interface {0} have {1} as primary, but {1} was not found".format(attrs['name'], attrs['bond-primary']))
+                    if primary not in attrs['bond-slaves']:
+                        raise ValueError("Primary interface {} is not bond slave of {}".format(attrs['bond-primary'], attrs['name']))
 
             if 'bond-slaves' in attrs:
                 slaves = attrs['bond-slaves']
@@ -194,4 +194,14 @@ class Interfaces(object):
                         if not slave_adapter or slave_adapter.attributes.get('bond-master', None) != attrs['name']:
                             raise ValueError("Interface {} have no {} as master".format(slave, attrs['name']))
 
-
+            if 'bond-master' in attrs:
+                master = self.getAdapter(attrs['bond-master'])
+                if not master:
+                    raise ValueError("Interface {} have no {} as master".format(attrs['name'], attrs['bond-master']))
+                master_mode = master.attributes['bond-mode']
+                if master_mode == 1 or master_mode == 'active-backup':
+                    if not 'bond-primary' in attrs:
+                        raise ValueError("Interface {} have no primary when bond master mode is active-backup".format(attrs['name']))
+                    primary = self.getAdapter(attrs['bond-primary'])
+                    if not primary:
+                        raise ValueError("Interface {0} have {1} as primary, but {1} was not found".format(attrs['name'], attrs['bond-primary']))
