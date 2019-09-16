@@ -415,7 +415,7 @@ class NetworkAdapter(object):
         self._ifAttributes['bond-updelay'] = delay
 
     def setBondDownDelay(self, delay):
-        self._ifAttributes['bond-donwdelay'] = delay
+        self._ifAttributes['bond-downdelay'] = delay
 
     def setBondPrimary(self, primary_name):
         self._ifAttributes['bond-primary'] = primary_name
