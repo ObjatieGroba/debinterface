@@ -116,7 +116,7 @@ class InterfacesReader(object):
             elif sline[0] == 'bond-master':
                 self._adapters[self._context].setBondMaster(sline[1])
             elif sline[0] == 'bond-slaves':
-                self._adapters[self._context].setBondSlaves(sline[1:])
+                self._adapters[self._context].setBondSlaves(sline[1].split())
             elif sline[0] == 'dns-nameservers':
                 nameservers = sline
                 del nameservers[0]
