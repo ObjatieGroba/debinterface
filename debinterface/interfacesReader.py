@@ -82,7 +82,7 @@ class InterfacesReader(object):
 
     def _parse_details(self, line):
         if line[0].isspace() is True:
-            sline = [x.strip() for x in line.split()]
+            sline = [x.strip() for x in line.split(None, 1)]
 
             if sline[0] == 'address':
                 self._adapters[self._context].setAddress(sline[1])
